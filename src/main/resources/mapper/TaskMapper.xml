@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.TaskMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.TaskDO">
+        <id column="id" property="id"/>
+        <id column="user_id" property="userId"/>
+        <result column="title" property="title"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_time" property="deleteTime"/>
+    </resultMap>
+
+    <select id="selectByIdAndUserId" resultMap="BaseResultMap">
+        SELECT *
+        FROM task t
+        WHERE t.id = #{id}
+        AND
+            t.user_id = #{userId}
+        AND
+        t.delete_time IS NULL
+    </select>
+
+    <select id="selectCountByIdAndUserId" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM task t
+        WHERE t.id = #{id}
+        AND
+            t.user_id = #{userId}
+        AND
+        t.delete_time IS NULL
+    </select>
+
+    <select id="selectCountByTitleAndUserId" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM task t
+        WHERE
+            t.title = #{title}
+        AND
+            t.user_id = #{userId}
+        AND
+            t.delete_time IS NULL
+    </select>
+
+    <!--CONCAT("%",#{q},"%")-->
+    <select id="selectByTitleLikeKeyword" resultMap="BaseResultMap">
+        SELECT *
+        FROM task t
+        WHERE
+            t.title LIKE #{q}
+        AND
+            t.delete_time IS NULL
+    </select>
+
+</mapper>
